@@ -1,28 +1,25 @@
 import tkinter
-import tkintermapview
+import math
 
-# Function to calculate map dimensions in meters
-def getDimensions(zoom_level, map_width_px, map_height_px):
-    # Earth's circumference in meters
-    EARTH_CIRCUMFERENCE = 40075017
-    
-    # Calculate the meters per pixel at this zoom level
-    meters_per_pixel = EARTH_CIRCUMFERENCE / (TILE_SIZE * (2 ** zoom_level))
-    
-    # Calculate map dimensions in meters
-    map_width_meters = meters_per_pixel * map_width_px
-    map_height_meters = meters_per_pixel * map_height_px
-    
-    return map_width_meters, map_height_meters
+from tkintermapview import *
+from controllers import *
 
 # Setup the window
 def setup():
     window = tkinter.Tk()
 
+    # Create a frame for the information contained in the sidebar
+    sideBar = tkinter.Frame(window, width=400)
+    sideBar.pack(side=tkinter.LEFT, fill=tkinter.Y, padx=10, pady=10)
+
     # Setup the map widget
-    map = tkintermapview.TkinterMapView(window, width=600, height=600)
+    map = TkinterMapView(window, width=600, height=600)
     map.set_tile_server("https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga", max_zoom=22)
     map.place(relx=1.0, rely=0.5, anchor=tkinter.E)
+
+    # Setup the export button
+    button = tkinter.Button(sideBar, text="Export", command=lambda: exportPressed(map))
+    button.pack()
 
     # Setup the window itself
     window.geometry("1000x600")
